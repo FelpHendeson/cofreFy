@@ -42,6 +42,10 @@ export const categoryRepository = {
     });
   },
 
+  async delete(id: string): Promise<Category> {
+    return prisma.category.delete({ where: { id } });
+  },
+
   async existsByNameAndType(
     name: string,
     type: CategoryType,

@@ -1,5 +1,6 @@
 import { Prisma } from "@prisma/client";
 import { categoryRepository } from "../repositories/category.repository";
+import { canDeleteCategory } from "../utils/category-usage.guard";
 import type {
   CreateCategoryInput,
   UpdateCategoryInput,
@@ -98,5 +99,21 @@ export const categoryService = {
     }
 
     return categoryRepository.updateStatus(id, true);
+  },
+
+  async delete(id: string) {
+    const existing = await categoryRepository.findById(id);
+
+    if (!existing) {
+      throw new Error("Categoria não encontrada.");
+    }
+
+    const deleteCheck = await canDeleteCategory(existing);
+
+    if (!deleteCheck.canDelete) {
+      throw new Error(deleteCheck.reason ?? "Categoria não pode ser excluída.");
+    }
+
+    return categoryRepository.delete(id);
   },
 };

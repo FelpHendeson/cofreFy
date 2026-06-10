@@ -107,3 +107,21 @@ export async function reactivateCategoryAction(
     };
   }
 }
+
+export async function deleteCategoryAction(
+  id: string,
+): Promise<CategoryActionResult> {
+  try {
+    await categoryService.delete(id);
+    revalidatePath("/categories");
+    return { success: true, message: "Categoria excluída com sucesso." };
+  } catch (error) {
+    return {
+      success: false,
+      message:
+        error instanceof Error
+          ? error.message
+          : "Não foi possível excluir a categoria.",
+    };
+  }
+}

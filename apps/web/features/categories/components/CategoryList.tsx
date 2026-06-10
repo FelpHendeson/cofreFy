@@ -19,14 +19,27 @@ export function CategoryList({ categories }: CategoryListProps) {
   const [actionMessage, setActionMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
 
-  function handleStatusChange(id: string, action: "deactivate" | "reactivate") {
+  function handleStatusChange(
+    category: Category,
+    action: "deactivate" | "reactivate",
+  ) {
+    if (
+      action === "deactivate" &&
+      category.isDefault &&
+      !window.confirm(
+        `"${category.name}" é uma categoria padrão do sistema. Deseja inativá-la mesmo assim?`,
+      )
+    ) {
+      return;
+    }
+
     setActionMessage(null);
 
     startTransition(async () => {
       const result =
         action === "deactivate"
-          ? await deactivateCategoryAction(id)
-          : await reactivateCategoryAction(id);
+          ? await deactivateCategoryAction(category.id)
+          : await reactivateCategoryAction(category.id);
 
       setActionMessage(
         result.message ??
@@ -35,7 +48,7 @@ export function CategoryList({ categories }: CategoryListProps) {
             : "Não foi possível atualizar o status."),
       );
 
-      if (result.success && editingCategory?.id === id) {
+      if (result.success && editingCategory?.id === category.id) {
         setEditingCategory(null);
       }
     });
@@ -76,7 +89,14 @@ export function CategoryList({ categories }: CategoryListProps) {
           <tbody className="divide-y divide-slate-100">
             {categories.map((category) => (
               <tr key={category.id} className="hover:bg-slate-50/80">
-                <td className="px-4 py-3 font-medium text-slate-900">{category.name}</td>
+                <td className="px-4 py-3">
+                  <div className="font-medium text-slate-900">{category.name}</div>
+                  {category.isDefault && (
+                    <p className="mt-0.5 text-xs text-blue-600">
+                      Categoria protegida do sistema
+                    </p>
+                  )}
+                </td>
                 <td className="px-4 py-3 text-slate-600">
                   {categoryTypeLabels[category.type]}
                 </td>
@@ -98,7 +118,7 @@ export function CategoryList({ categories }: CategoryListProps) {
                       <button
                         type="button"
                         disabled={isPending}
-                        onClick={() => handleStatusChange(category.id, "deactivate")}
+                        onClick={() => handleStatusChange(category, "deactivate")}
                         className="rounded-md border border-amber-300 px-3 py-1.5 text-xs font-medium text-amber-700 transition hover:bg-amber-50 disabled:opacity-60"
                       >
                         Inativar
@@ -107,7 +127,7 @@ export function CategoryList({ categories }: CategoryListProps) {
                       <button
                         type="button"
                         disabled={isPending}
-                        onClick={() => handleStatusChange(category.id, "reactivate")}
+                        onClick={() => handleStatusChange(category, "reactivate")}
                         className="rounded-md border border-emerald-300 px-3 py-1.5 text-xs font-medium text-emerald-700 transition hover:bg-emerald-50 disabled:opacity-60"
                       >
                         Reativar
