@@ -11,7 +11,9 @@
     "db:generate": "pnpm --filter @cofrefy/web db:generate",
     "db:push": "pnpm --filter @cofrefy/web db:push",
     "db:studio": "pnpm --filter @cofrefy/web db:studio",
-    "db:validate": "pnpm --filter @cofrefy/web db:validate"
+    "db:validate": "pnpm --filter @cofrefy/web db:validate",
+    "db:migrate": "pnpm --filter @cofrefy/web db:migrate",
+    "db:seed": "pnpm --filter @cofrefy/web db:seed"
   },
   "engines": {
     "node": ">=20"
