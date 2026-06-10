@@ -537,3 +537,16 @@ Neste momento, o módulo de categorias pode ser implementado sem relacionamento 
 Quando o módulo de movimentações for criado, será necessário revisar este documento para adicionar o relacionamento entre `Category` e `Transaction`.
 
 A implementação deve preparar o projeto para esse relacionamento futuro, mas sem criar movimentações agora.
+
+---
+
+## Checklist de integração com movimentações
+
+Quando `docs/04-modulo-movimentacoes.md` for especificado e implementado, revisar:
+
+- [ ] Adicionar relação `Category` ↔ `Transaction` no Prisma.
+- [ ] Implementar verificação real em `canDeleteCategory` (`category-usage.guard.ts`).
+- [ ] Bloquear exclusão física de categorias com movimentações vinculadas (RN007).
+- [ ] Garantir que apenas categorias ativas apareçam ao cadastrar movimentações (RN005).
+- [ ] Atualizar seed, validações e testes deste módulo.
+- [ ] Revisar filtros e listagens que exibem categorias inativas no histórico.
