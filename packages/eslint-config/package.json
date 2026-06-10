@@ -2,5 +2,11 @@
   "name": "@cofrefy/eslint-config",
   "version": "0.0.0",
   "private": true,
-  "main": "./index.js"
+  "type": "module",
+  "main": "./index.mjs",
+  "exports": "./index.mjs",
+  "peerDependencies": {
+    "eslint": "^9",
+    "eslint-config-next": ">=16"
+  }
 }
