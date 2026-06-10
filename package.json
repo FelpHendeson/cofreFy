@@ -13,7 +13,9 @@
     "db:studio": "pnpm --filter @cofrefy/web db:studio",
     "db:validate": "pnpm --filter @cofrefy/web db:validate",
     "db:migrate": "pnpm --filter @cofrefy/web db:migrate",
-    "db:seed": "pnpm --filter @cofrefy/web db:seed"
+    "db:migrate:deploy": "pnpm --filter @cofrefy/web db:migrate:deploy",
+    "db:seed": "pnpm --filter @cofrefy/web db:seed",
+    "setup:env": "cp .env.example .env && cp .env.example apps/web/.env"
   },
   "engines": {
     "node": ">=20"

@@ -12,6 +12,7 @@
     "db:studio": "prisma studio",
     "db:validate": "node --env-file=.env scripts/validate-db.mjs",
     "db:migrate": "prisma migrate dev",
+    "db:migrate:deploy": "prisma migrate deploy",
     "db:seed": "node --env-file=.env prisma/seed.mjs"
   },
   "prisma": {
@@ -28,6 +29,7 @@
     "react-dom": "19.2.4"
   },
   "devDependencies": {
+    "@cofrefy/eslint-config": "workspace:*",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
