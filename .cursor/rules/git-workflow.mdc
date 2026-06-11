@@ -1,0 +1,20 @@
+---
+description: Commits e push após cada conjunto de alterações no CofreFy
+alwaysApply: true
+---
+
+# Git — workflow do CofreFy
+
+Após concluir cada conjunto de alterações (feature, fix, chore, etc.):
+
+1. **Commitar** com [Conventional Commits](https://www.conventionalcommits.org/):
+   - `feat(escopo): descrição`
+   - `fix(escopo): descrição`
+   - `chore(escopo): descrição`
+   - `docs(escopo): descrição`
+2. **Push** para `origin` na branch atual (`git push`).
+3. Não acumular mudanças sem commit entre tarefas distintas.
+4. Não commitar `.env` nem arquivos com segredos.
+5. Mensagem focada no **porquê**, em 1–2 frases.
+
+Exemplos de escopo: `categories`, `infra`, `config`, `web`, `database`.
