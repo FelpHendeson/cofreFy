@@ -1,7 +1,4 @@
-import { Suspense } from "react";
-import { CategoryFilters } from "@/features/categories/components/CategoryFilters";
-import { CategoryForm } from "@/features/categories/components/CategoryForm";
-import { CategoryList } from "@/features/categories/components/CategoryList";
+import { CategoriesView } from "@/features/categories/components/CategoriesView";
 import { categoryService } from "@/features/categories/services/category.service";
 import type { CategoryFilterType } from "@/features/categories/types/category.types";
 import { categoryTypeSchema } from "@/features/categories/schemas/category.schema";
@@ -36,16 +33,7 @@ export default async function CategoriesPage({ searchParams }: CategoriesPagePro
         </p>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[320px_1fr]">
-        <div className="space-y-6">
-          <Suspense fallback={<div className="h-20 rounded-xl bg-slate-100" />}>
-            <CategoryFilters currentType={filterType} />
-          </Suspense>
-          <CategoryForm />
-        </div>
-
-        <CategoryList categories={categories} />
-      </div>
+      <CategoriesView categories={categories} filterType={filterType} />
     </div>
   );
 }

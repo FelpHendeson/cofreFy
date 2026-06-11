@@ -16,6 +16,7 @@ import { categoryTypeLabels } from "../utils/category-labels";
 
 type CategoryFormProps = {
   category?: Category;
+  variant?: "card" | "modal";
   onCancel?: () => void;
   onSuccess?: () => void;
 };
@@ -27,10 +28,16 @@ const defaultValues: CategoryFormInput = {
   icon: undefined,
 };
 
-export function CategoryForm({ category, onCancel, onSuccess }: CategoryFormProps) {
+export function CategoryForm({
+  category,
+  variant = "card",
+  onCancel,
+  onSuccess,
+}: CategoryFormProps) {
   const [serverMessage, setServerMessage] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
   const isEditing = !!category;
+  const isModal = variant === "modal";
 
   const {
     register,
@@ -78,21 +85,19 @@ export function CategoryForm({ category, onCancel, onSuccess }: CategoryFormProp
         reset(defaultValues);
       }
 
-      setServerMessage(result.message ?? "Categoria salva com sucesso.");
       onSuccess?.();
     });
   }
 
-  return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
-    >
-      <h2 className="text-lg font-semibold text-slate-900">
-        {isEditing ? "Editar categoria" : "Nova categoria"}
-      </h2>
+  const formContent = (
+    <>
+      {!isModal && (
+        <h2 className="text-lg font-semibold text-slate-900">
+          {isEditing ? "Editar categoria" : "Nova categoria"}
+        </h2>
+      )}
 
-      <div className="mt-4 grid gap-4 md:grid-cols-2">
+      <div className={`grid gap-4 md:grid-cols-2 ${isModal ? "" : "mt-4"}`}>
         <div className="md:col-span-2">
           <label htmlFor="name" className="mb-1 block text-sm font-medium text-slate-700">
             Nome
@@ -157,13 +162,7 @@ export function CategoryForm({ category, onCancel, onSuccess }: CategoryFormProp
       </div>
 
       {serverMessage && (
-        <p
-          className={`mt-4 text-sm ${
-            serverMessage.includes("sucesso") ? "text-emerald-700" : "text-red-600"
-          }`}
-        >
-          {serverMessage}
-        </p>
+        <p className="mt-4 text-sm text-red-600">{serverMessage}</p>
       )}
 
       <div className="mt-6 flex flex-wrap gap-3">
@@ -175,16 +174,29 @@ export function CategoryForm({ category, onCancel, onSuccess }: CategoryFormProp
           {isPending ? "Salvando..." : isEditing ? "Salvar alterações" : "Criar categoria"}
         </button>
 
-        {isEditing && onCancel && (
+        {onCancel && (
           <button
             type="button"
             onClick={onCancel}
             className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
           >
-            Cancelar edição
+            Cancelar
           </button>
         )}
       </div>
+    </>
+  );
+
+  if (isModal) {
+    return <form onSubmit={handleSubmit(onSubmit)}>{formContent}</form>;
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+    >
+      {formContent}
     </form>
   );
 }

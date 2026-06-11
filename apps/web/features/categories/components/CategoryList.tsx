@@ -1,23 +1,38 @@
 "use client";
 
 import type { Category } from "@prisma/client";
-import { useState, useTransition } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
 import {
   deactivateCategoryAction,
   reactivateCategoryAction,
 } from "../actions/category.actions";
 import { categoryTypeLabels } from "../utils/category-labels";
-import { CategoryForm } from "./CategoryForm";
 import { CategoryStatusBadge } from "./CategoryStatusBadge";
 
 type CategoryListProps = {
   categories: Category[];
+  onEdit: (category: Category) => void;
 };
 
-export function CategoryList({ categories }: CategoryListProps) {
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
-  const [actionMessage, setActionMessage] = useState<string | null>(null);
+type ActionFeedback = {
+  message: string;
+  success: boolean;
+};
+
+export function CategoryList({ categories, onEdit }: CategoryListProps) {
+  const router = useRouter();
+  const [actionFeedback, setActionFeedback] = useState<ActionFeedback | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    if (!actionFeedback) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => setActionFeedback(null), 5000);
+    return () => window.clearTimeout(timeout);
+  }, [actionFeedback]);
 
   function handleStatusChange(
     category: Category,
@@ -33,7 +48,7 @@ export function CategoryList({ categories }: CategoryListProps) {
       return;
     }
 
-    setActionMessage(null);
+    setActionFeedback(null);
 
     startTransition(async () => {
       const result =
@@ -41,15 +56,17 @@ export function CategoryList({ categories }: CategoryListProps) {
           ? await deactivateCategoryAction(category.id)
           : await reactivateCategoryAction(category.id);
 
-      setActionMessage(
-        result.message ??
+      setActionFeedback({
+        message:
+          result.message ??
           (result.success
             ? "Status atualizado com sucesso."
             : "Não foi possível atualizar o status."),
-      );
+        success: result.success,
+      });
 
-      if (result.success && editingCategory?.id === category.id) {
-        setEditingCategory(null);
+      if (result.success) {
+        router.refresh();
       }
     });
   }
@@ -64,17 +81,21 @@ export function CategoryList({ categories }: CategoryListProps) {
 
   return (
     <div className="space-y-4">
-      {actionMessage && (
-        <p
-          className={`text-sm ${
-            actionMessage.includes("sucesso") ? "text-emerald-700" : "text-red-600"
+      {actionFeedback && (
+        <div
+          role="status"
+          aria-live="polite"
+          className={`rounded-lg border px-4 py-3 text-sm ${
+            actionFeedback.success
+              ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+              : "border-red-200 bg-red-50 text-red-700"
           }`}
         >
-          {actionMessage}
-        </p>
+          {actionFeedback.message}
+        </div>
       )}
 
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white shadow-sm">
         <table className="min-w-full divide-y divide-slate-200 text-sm">
           <thead className="bg-slate-50">
             <tr>
@@ -109,8 +130,8 @@ export function CategoryList({ categories }: CategoryListProps) {
                   <div className="flex justify-end gap-2">
                     <button
                       type="button"
-                      onClick={() => setEditingCategory(category)}
-                      className="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-50"
+                      onClick={() => onEdit(category)}
+                      className="rounded-md border border-slate-300 px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1"
                     >
                       Editar
                     </button>
@@ -119,18 +140,18 @@ export function CategoryList({ categories }: CategoryListProps) {
                         type="button"
                         disabled={isPending}
                         onClick={() => handleStatusChange(category, "deactivate")}
-                        className="rounded-md border border-amber-300 px-3 py-1.5 text-xs font-medium text-amber-700 transition hover:bg-amber-50 disabled:opacity-60"
+                        className="rounded-md border border-amber-300 px-3 py-1.5 text-xs font-medium text-amber-700 transition hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-amber-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"
                       >
-                        Inativar
+                        {isPending ? "..." : "Inativar"}
                       </button>
                     ) : (
                       <button
                         type="button"
                         disabled={isPending}
                         onClick={() => handleStatusChange(category, "reactivate")}
-                        className="rounded-md border border-emerald-300 px-3 py-1.5 text-xs font-medium text-emerald-700 transition hover:bg-emerald-50 disabled:opacity-60"
+                        className="rounded-md border border-emerald-300 px-3 py-1.5 text-xs font-medium text-emerald-700 transition hover:bg-emerald-50 focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-60"
                       >
-                        Reativar
+                        {isPending ? "..." : "Reativar"}
                       </button>
                     )}
                   </div>
@@ -140,14 +161,6 @@ export function CategoryList({ categories }: CategoryListProps) {
           </tbody>
         </table>
       </div>
-
-      {editingCategory && (
-        <CategoryForm
-          category={editingCategory}
-          onCancel={() => setEditingCategory(null)}
-          onSuccess={() => setEditingCategory(null)}
-        />
-      )}
     </div>
   );
 }
