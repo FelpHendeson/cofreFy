@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "node --env-file=.env scripts/dev.mjs",
     "build": "next build",
-    "start": "next start",
+    "start": "node --env-file=.env scripts/start.mjs",
     "lint": "eslint",
     "db:generate": "prisma generate",
     "db:push": "prisma db push",

@@ -57,6 +57,7 @@ O `.env` na raiz é usado pelo Docker Compose. O `.env` em `apps/web/` é usado 
 | `MYSQL_ROOT_PASSWORD` | Senha root do MySQL |
 | `DATABASE_URL` | URL de conexão do Prisma |
 | `SHADOW_DATABASE_URL` | URL root para migrations locais (`prisma migrate dev`) |
+| `PORT` | Porta do servidor Next.js (padrão: `3000`) |
 
 ### 3. Subir o banco MySQL
 
@@ -91,8 +92,10 @@ pnpm db:validate
 pnpm dev
 ```
 
-- App: [http://localhost:3000](http://localhost:3000)
-- Categorias: [http://localhost:3000/categories](http://localhost:3000/categories)
+A porta é definida por `PORT` em `apps/web/.env` (padrão: **3000**). Se 3000 estiver ocupada, use por exemplo `PORT=3001`.
+
+- App: `http://localhost:<PORT>`
+- Categorias: `http://localhost:<PORT>/categories`
 
 ## Banco de dados e módulos
 
