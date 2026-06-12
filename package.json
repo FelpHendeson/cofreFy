@@ -3,11 +3,15 @@
   "private": true,
   "scripts": {
     "dev": "pnpm --filter @cofrefy/web dev",
+    "dev:setup": "node scripts/dev-setup.mjs",
+    "dev:up": "node scripts/dev-setup.mjs",
     "build": "pnpm --filter @cofrefy/web build",
     "start": "pnpm --filter @cofrefy/web start",
     "lint": "pnpm --filter @cofrefy/web lint",
+    "setup:env": "node scripts/ensure-env.mjs",
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",
+    "db:wait": "node scripts/wait-for-mysql.mjs",
     "db:generate": "pnpm --filter @cofrefy/web db:generate",
     "db:push": "pnpm --filter @cofrefy/web db:push",
     "db:studio": "pnpm --filter @cofrefy/web db:studio",
@@ -15,7 +19,7 @@
     "db:migrate": "pnpm --filter @cofrefy/web db:migrate",
     "db:migrate:deploy": "pnpm --filter @cofrefy/web db:migrate:deploy",
     "db:seed": "pnpm --filter @cofrefy/web db:seed",
-    "setup:env": "cp .env.example .env && cp .env.example apps/web/.env"
+    "db:reset": "pnpm --filter @cofrefy/web db:reset"
   },
   "engines": {
     "node": ">=20"
