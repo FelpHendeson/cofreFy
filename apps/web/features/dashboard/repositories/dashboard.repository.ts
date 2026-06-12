@@ -1,19 +1,19 @@
 import { prisma } from "@/lib/prisma";
-import { getMonthDateRange } from "@/features/transactions/utils/transaction-formatters";
 import type { TransactionWithCategory } from "@/features/transactions/types/transaction.types";
+import { getDashboardMonthDateRange } from "../utils/dashboard-date-range";
 
 export const dashboardRepository = {
   async findTransactionsByMonth(
     month: number,
     year: number,
   ): Promise<TransactionWithCategory[]> {
-    const { start, end } = getMonthDateRange(month, year);
+    const { start, exclusiveEnd } = getDashboardMonthDateRange(month, year);
 
     return prisma.transaction.findMany({
       where: {
         date: {
           gte: start,
-          lte: end,
+          lt: exclusiveEnd,
         },
       },
       include: { category: true },
