@@ -3,13 +3,19 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { FilterSelect } from "@/components/ui/FilterSelect";
 import { monthLabels } from "@/features/transactions/utils/transaction-labels";
-import type { MonthPeriod } from "../types/dashboard.types";
 
-type DashboardMonthFilterProps = {
-  period: MonthPeriod;
+type MonthPeriod = {
+  month: number;
+  year: number;
 };
 
-export function DashboardMonthFilter({ period }: DashboardMonthFilterProps) {
+type MonthPeriodFilterProps = {
+  period: MonthPeriod;
+  basePath: string;
+  idPrefix: string;
+};
+
+export function MonthPeriodFilter({ period, basePath, idPrefix }: MonthPeriodFilterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const currentYear = new Date().getFullYear();
@@ -18,13 +24,13 @@ export function DashboardMonthFilter({ period }: DashboardMonthFilterProps) {
   function updateParam(key: "month" | "year", value: string) {
     const params = new URLSearchParams(searchParams.toString());
     params.set(key, value);
-    router.push(`/dashboard?${params.toString()}`);
+    router.push(`${basePath}?${params.toString()}`);
   }
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:max-w-md">
       <FilterSelect
-        id="dashboard-month-filter"
+        id={`${idPrefix}-month-filter`}
         label="Mês"
         value={period.month}
         onChange={(value) => updateParam("month", value)}
@@ -35,7 +41,7 @@ export function DashboardMonthFilter({ period }: DashboardMonthFilterProps) {
       />
 
       <FilterSelect
-        id="dashboard-year-filter"
+        id={`${idPrefix}-year-filter`}
         label="Ano"
         value={period.year}
         onChange={(value) => updateParam("year", value)}

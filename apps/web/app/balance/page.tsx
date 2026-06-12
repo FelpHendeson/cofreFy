@@ -1,11 +1,6 @@
 import { Suspense } from "react";
-import { CategoryBalanceSummary } from "@/features/monthly-balance/components/CategoryBalanceSummary";
-import { CreditsTable } from "@/features/monthly-balance/components/CreditsTable";
-import { DebitsTable } from "@/features/monthly-balance/components/DebitsTable";
-import { MonthlyBalanceFilter } from "@/features/monthly-balance/components/MonthlyBalanceFilter";
-import { MonthlyBalanceSummary } from "@/features/monthly-balance/components/MonthlyBalanceSummary";
-import { PaymentMethodSummary } from "@/features/monthly-balance/components/PaymentMethodSummary";
-import { QualificationBalanceSummary } from "@/features/monthly-balance/components/QualificationBalanceSummary";
+import { MonthPeriodFilter } from "@/components/report/MonthPeriodFilter";
+import { MonthlyBalanceContent } from "@/features/monthly-balance/components/MonthlyBalanceContent";
 import { monthlyBalanceService } from "@/features/monthly-balance/services/monthly-balance.service";
 import type { MonthPeriod } from "@/features/monthly-balance/types/monthly-balance.types";
 
@@ -68,7 +63,7 @@ export default async function BalancePage({ searchParams }: BalancePageProps) {
             <div className="h-20 w-full max-w-md animate-pulse rounded-lg bg-slate-100 lg:w-80" />
           }
         >
-          <MonthlyBalanceFilter period={data.period} />
+          <MonthPeriodFilter period={data.period} basePath="/balance" idPrefix="balance" />
         </Suspense>
       </div>
 
@@ -78,30 +73,7 @@ export default async function BalancePage({ searchParams }: BalancePageProps) {
         </div>
       )}
 
-      <div className="space-y-6">
-        <MonthlyBalanceSummary summary={data.summary} />
-
-        <CreditsTable credits={data.credits} />
-        <DebitsTable debits={data.debits} />
-
-        <div className="grid gap-6 lg:grid-cols-2">
-          <CategoryBalanceSummary
-            title="Entradas por categoria"
-            items={data.incomesByCategory}
-            emptyMessage="Nenhuma entrada registrada neste mês."
-          />
-          <CategoryBalanceSummary
-            title="Saídas por categoria"
-            items={data.expensesByCategory}
-            emptyMessage="Nenhuma saída registrada neste mês."
-          />
-        </div>
-
-        <div className="grid gap-6 lg:grid-cols-2">
-          <PaymentMethodSummary items={data.byPaymentMethod} />
-          <QualificationBalanceSummary items={data.debitsByQualification} />
-        </div>
-      </div>
+      <MonthlyBalanceContent data={data} />
     </div>
   );
 }

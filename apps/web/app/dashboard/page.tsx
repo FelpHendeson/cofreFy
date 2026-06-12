@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { BiggestExpenseCard } from "@/features/dashboard/components/BiggestExpenseCard";
 import { CategoryExpenseSummary } from "@/features/dashboard/components/CategoryExpenseSummary";
-import { DashboardMonthFilter } from "@/features/dashboard/components/DashboardMonthFilter";
+import { MonthPeriodFilter } from "@/components/report/MonthPeriodFilter";
 import { DashboardSummaryCards } from "@/features/dashboard/components/DashboardSummaryCards";
 import { QualificationExpenseSummary } from "@/features/dashboard/components/QualificationExpenseSummary";
 import { RecentTransactionsList } from "@/features/dashboard/components/RecentTransactionsList";
@@ -68,7 +68,7 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
             <div className="h-20 w-full max-w-md animate-pulse rounded-lg bg-slate-100 lg:w-80" />
           }
         >
-          <DashboardMonthFilter period={data.period} />
+          <MonthPeriodFilter period={data.period} basePath="/dashboard" idPrefix="dashboard" />
         </Suspense>
       </div>
 
