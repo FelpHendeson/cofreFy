@@ -1,4 +1,6 @@
 import { Suspense } from "react";
+import { EmptyState } from "@/components/layout/EmptyState";
+import { PageHeader } from "@/components/layout/PageHeader";
 import { MonthPeriodFilter } from "@/components/report/MonthPeriodFilter";
 import { MonthlyBalanceContent } from "@/features/monthly-balance/components/MonthlyBalanceContent";
 import { monthlyBalanceService } from "@/features/monthly-balance/services/monthly-balance.service";
@@ -47,30 +49,22 @@ export default async function BalancePage({ searchParams }: BalancePageProps) {
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-10">
-      <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="text-sm font-medium uppercase tracking-wider text-emerald-600">
-            CofreFy
-          </p>
-          <h1 className="mt-2 text-3xl font-semibold text-slate-900">Balancete Mensal</h1>
-          <p className="mt-2 max-w-2xl text-sm text-slate-600">
-            Conferência estruturada dos créditos e débitos do mês selecionado.
-          </p>
-        </div>
-
-        <Suspense
-          fallback={
-            <div className="h-20 w-full max-w-md animate-pulse rounded-lg bg-slate-100 lg:w-80" />
-          }
-        >
-          <MonthPeriodFilter period={data.period} basePath="/balance" idPrefix="balance" />
-        </Suspense>
-      </div>
+      <PageHeader
+        title="Balancete Mensal"
+        description="Conferência estruturada dos créditos e débitos do mês selecionado."
+        actions={
+          <Suspense
+            fallback={
+              <div className="h-20 w-full max-w-md animate-pulse rounded-lg bg-slate-100 lg:w-80" />
+            }
+          >
+            <MonthPeriodFilter period={data.period} basePath="/balance" idPrefix="balance" />
+          </Suspense>
+        }
+      />
 
       {!data.summary.hasMovements && (
-        <div className="mb-6 rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-          Nenhuma movimentação encontrada para este mês.
-        </div>
+        <EmptyState message="Nenhuma movimentação encontrada para este mês." />
       )}
 
       <MonthlyBalanceContent data={data} />

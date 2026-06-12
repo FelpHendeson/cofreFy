@@ -1,4 +1,9 @@
-import type { CategoryType, TransactionType } from "@prisma/client";
+import type {
+  CategoryType,
+  ExpenseQualification,
+  PaymentMethod,
+  TransactionType,
+} from "@prisma/client";
 import { categoryRepository } from "@/features/categories/repositories/category.repository";
 import { transactionRepository } from "../repositories/transaction.repository";
 import type {
@@ -37,8 +42,21 @@ async function validateCategory(categoryId: string, transactionType: Transaction
   return category;
 }
 
+function normalizeOptionalEnum<T extends string>(
+  value: T | "" | undefined | null,
+): T | null {
+  if (!value) {
+    return null;
+  }
+
+  return value;
+}
+
 function buildTransactionData(input: CreateTransactionInput | UpdateTransactionInput) {
-  const qualification = input.type === "INCOME" ? null : (input.qualification ?? null);
+  const qualification =
+    input.type === "INCOME"
+      ? null
+      : normalizeOptionalEnum<ExpenseQualification>(input.qualification);
 
   return {
     type: input.type,
@@ -46,7 +64,7 @@ function buildTransactionData(input: CreateTransactionInput | UpdateTransactionI
     amount: parseAmountValue(input.amount),
     date: parseDateValue(input.date),
     qualification,
-    paymentMethod: input.paymentMethod ?? null,
+    paymentMethod: normalizeOptionalEnum<PaymentMethod>(input.paymentMethod),
     notes: input.notes ?? null,
     isRecurring: input.isRecurring ?? false,
   };

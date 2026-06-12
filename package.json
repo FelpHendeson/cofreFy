@@ -8,6 +8,8 @@
     "build": "node scripts/web.mjs build",
     "start": "node scripts/web.mjs start",
     "lint": "node scripts/web.mjs lint",
+    "test": "node scripts/web.mjs test",
+    "test:unit": "node scripts/web.mjs test",
     "setup:env": "node scripts/ensure-env.mjs",
     "db:up": "docker compose up -d",
     "db:down": "docker compose down",

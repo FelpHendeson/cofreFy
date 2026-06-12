@@ -73,10 +73,16 @@ Rotas ativas: `/dashboard`, `/balance`, `/categories`, `/transactions` (home red
 
 ---
 
+## Testes e layout (`docs/07`, `docs/08`)
+
+- Vitest configurado com testes unitários de cálculos, agrupamentos, período mensal e schemas Zod.
+- Comandos `pnpm test` e `pnpm test:unit` na raiz.
+- `PageHeader`, `EmptyState` e ordem de navegação padronizados conforme plano de layout.
+- Playwright (E2E) documentado em `docs/07`, ainda não implementado.
+
 ## Pendências abertas
 
-- Plano de testes (`docs/07`) e testes automatizados.
-- `pnpm build` falha por erro de tipo em `transaction.service.ts` (qualification `""` vs enum) — pré-existente, fora do balancete.
+- Testes end-to-end com Playwright.
 - Módulo de movimentações ainda usa `lte` no fim do mês (dashboard já usa semiaberto; balancete também).
 - Gráficos no dashboard (opcional; alinhar spec 01 com 05).
 - `db:reset` não roda o seed de cenário automaticamente.

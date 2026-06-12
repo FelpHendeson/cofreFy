@@ -8,6 +8,7 @@ import type {
   TransactionListFilters,
   TransactionQualificationFilter,
 } from "../types/transaction.types";
+import { getYearFilterOptions } from "@/utils/month-filter-options";
 import {
   monthLabels,
   qualificationFilterOptions,
@@ -24,8 +25,7 @@ export function TransactionFilters({ filters, categories }: TransactionFiltersPr
   const searchParams = useSearchParams();
 
   const activeCategories = categories.filter((category) => category.isActive);
-  const currentYear = new Date().getFullYear();
-  const yearOptions = Array.from({ length: 7 }, (_, index) => currentYear - 3 + index);
+  const yearOptions = getYearFilterOptions();
 
   function updateParam(key: string, value: string | undefined) {
     const params = new URLSearchParams(searchParams.toString());

@@ -32,6 +32,10 @@ export function runEslint() {
   runNode(resolveBin("eslint", "bin", "eslint.js"), ["."]);
 }
 
+export function runVitest() {
+  runNode(resolveBin("vitest", "vitest.mjs"), ["run"]);
+}
+
 export function runNextBuild() {
   runNode(resolveBin("next", "dist", "bin", "next"), ["build"]);
 }

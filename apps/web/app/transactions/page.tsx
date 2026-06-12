@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/layout/PageHeader";
 import { categoryService } from "@/features/categories/services/category.service";
 import { TransactionsView } from "@/features/transactions/components/TransactionsView";
 import {
@@ -97,15 +98,10 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-10">
-      <div className="mb-8">
-        <p className="text-sm font-medium uppercase tracking-wider text-emerald-600">
-          CofreFy
-        </p>
-        <h1 className="mt-2 text-3xl font-semibold text-slate-900">Movimentações</h1>
-        <p className="mt-2 max-w-2xl text-sm text-slate-600">
-          Registre, edite e filtre entradas e saídas financeiras vinculadas às categorias.
-        </p>
-      </div>
+      <PageHeader
+        title="Movimentações"
+        description="Registre, edite e filtre entradas e saídas financeiras vinculadas às categorias."
+      />
 
       <TransactionsView
         transactions={serializeTransactions(transactions)}

@@ -69,7 +69,8 @@ export function TransactionList({ transactions, onEdit }: TransactionListProps) 
   if (transactions.length === 0) {
     return (
       <div className="rounded-xl border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">
-        Nenhuma movimentação encontrada para os filtros selecionados.
+        Nenhuma movimentação encontrada para os filtros selecionados. Crie sua primeira
+        movimentação para começar.
       </div>
     );
   }

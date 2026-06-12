@@ -263,7 +263,21 @@ pnpm db:generate
 
 Depois reinicie com `pnpm dev`.
 
-Os scripts `lint`, `dev`, `build` e `db:*` (exceto `db:up`/`db:down`/`db:wait`) rodam via `node scripts/web.mjs` para evitar falhas de `pnpm` aninhado no Windows.
+Os scripts `lint`, `test`, `dev`, `build` e `db:*` (exceto `db:up`/`db:down`/`db:wait`) rodam via `node scripts/web.mjs` para evitar falhas de `pnpm` aninhado no Windows.
+
+## Testes
+
+Testes unitários com **Vitest** (cálculos financeiros, agrupamentos, período mensal e schemas Zod):
+
+```bash
+pnpm test
+# ou
+pnpm test:unit
+```
+
+Na pasta `apps/web`, também é possível usar `pnpm test:watch` para modo interativo.
+
+Testes end-to-end com Playwright estão documentados em `docs/07-plano-de-testes.md` e ainda não foram implementados.
 
 ## Documentação
 
@@ -277,9 +291,12 @@ Consulte os documentos em `docs/` **antes** de implementar qualquer funcionalida
 - `docs/05-modulo-dashboard-mensal.md` — módulo implementado
 - `docs/06-modulo-balancete-mensal.md` — módulo implementado
 
-Documentos SDD pendentes (criar antes de cada módulo):
-- `docs/07-plano-de-testes.md`
-- `docs/08-prompts-para-agente.md`
+- `docs/07-plano-de-testes.md` — plano de testes (unitários aplicados)
+- `docs/08-plano-de-navegacao-e-layout.md` — navegação e layout (aplicado)
+
+Documentos SDD pendentes:
+
+- `docs/08-prompts-para-agente.md` — a criar
 
 Relatório (fora da numeração SDD):
 

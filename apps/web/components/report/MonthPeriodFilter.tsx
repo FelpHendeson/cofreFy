@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { FilterSelect } from "@/components/ui/FilterSelect";
 import { monthLabels } from "@/features/transactions/utils/transaction-labels";
+import { getYearFilterOptions } from "@/utils/month-filter-options";
 
 type MonthPeriod = {
   month: number;
@@ -18,8 +19,7 @@ type MonthPeriodFilterProps = {
 export function MonthPeriodFilter({ period, basePath, idPrefix }: MonthPeriodFilterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const currentYear = new Date().getFullYear();
-  const yearOptions = Array.from({ length: 7 }, (_, index) => currentYear - 3 + index);
+  const yearOptions = getYearFilterOptions();
 
   function updateParam(key: "month" | "year", value: string) {
     const params = new URLSearchParams(searchParams.toString());

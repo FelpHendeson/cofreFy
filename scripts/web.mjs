@@ -3,12 +3,14 @@ import {
   runNextBuild,
   runNodeEnvScript,
   runPrisma,
+  runVitest,
 } from "./lib/run-web.mjs";
 
 const task = process.argv[2];
 
 const tasks = {
   lint: () => runEslint(),
+  test: () => runVitest(),
   dev: () => runNodeEnvScript("scripts/dev.mjs"),
   build: () => runNextBuild(),
   start: () => runNodeEnvScript("scripts/start.mjs"),

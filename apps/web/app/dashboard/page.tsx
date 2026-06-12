@@ -1,7 +1,9 @@
 import { Suspense } from "react";
+import { EmptyState } from "@/components/layout/EmptyState";
+import { PageHeader } from "@/components/layout/PageHeader";
+import { MonthPeriodFilter } from "@/components/report/MonthPeriodFilter";
 import { BiggestExpenseCard } from "@/features/dashboard/components/BiggestExpenseCard";
 import { CategoryExpenseSummary } from "@/features/dashboard/components/CategoryExpenseSummary";
-import { MonthPeriodFilter } from "@/components/report/MonthPeriodFilter";
 import { DashboardSummaryCards } from "@/features/dashboard/components/DashboardSummaryCards";
 import { QualificationExpenseSummary } from "@/features/dashboard/components/QualificationExpenseSummary";
 import { RecentTransactionsList } from "@/features/dashboard/components/RecentTransactionsList";
@@ -52,30 +54,22 @@ export default async function DashboardPage({ searchParams }: DashboardPageProps
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-10">
-      <div className="mb-8 flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <p className="text-sm font-medium uppercase tracking-wider text-emerald-600">
-            CofreFy
-          </p>
-          <h1 className="mt-2 text-3xl font-semibold text-slate-900">Dashboard Mensal</h1>
-          <p className="mt-2 max-w-2xl text-sm text-slate-600">
-            Visão resumida das entradas, saídas e indicadores do mês selecionado.
-          </p>
-        </div>
-
-        <Suspense
-          fallback={
-            <div className="h-20 w-full max-w-md animate-pulse rounded-lg bg-slate-100 lg:w-80" />
-          }
-        >
-          <MonthPeriodFilter period={data.period} basePath="/dashboard" idPrefix="dashboard" />
-        </Suspense>
-      </div>
+      <PageHeader
+        title="Dashboard Mensal"
+        description="Visão resumida das entradas, saídas e indicadores do mês selecionado."
+        actions={
+          <Suspense
+            fallback={
+              <div className="h-20 w-full max-w-md animate-pulse rounded-lg bg-slate-100 lg:w-80" />
+            }
+          >
+            <MonthPeriodFilter period={data.period} basePath="/dashboard" idPrefix="dashboard" />
+          </Suspense>
+        }
+      />
 
       {!data.summary.hasMovements && (
-        <div className="mb-6 rounded-lg border border-dashed border-slate-300 bg-slate-50 px-4 py-3 text-sm text-slate-600">
-          Nenhuma movimentação encontrada para este mês.
-        </div>
+        <EmptyState message="Nenhuma movimentação encontrada para este mês." />
       )}
 
       <div className="space-y-6">

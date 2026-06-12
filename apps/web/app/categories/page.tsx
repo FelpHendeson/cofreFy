@@ -1,3 +1,4 @@
+import { PageHeader } from "@/components/layout/PageHeader";
 import { CategoriesView } from "@/features/categories/components/CategoriesView";
 import { categoryService } from "@/features/categories/services/category.service";
 import type { CategoryFilterType } from "@/features/categories/types/category.types";
@@ -23,15 +24,10 @@ export default async function CategoriesPage({ searchParams }: CategoriesPagePro
 
   return (
     <div className="mx-auto w-full max-w-6xl px-6 py-10">
-      <div className="mb-8">
-        <p className="text-sm font-medium uppercase tracking-wider text-emerald-600">
-          CofreFy
-        </p>
-        <h1 className="mt-2 text-3xl font-semibold text-slate-900">Categorias</h1>
-        <p className="mt-2 max-w-2xl text-sm text-slate-600">
-          Gerencie as categorias usadas para classificar entradas e saídas financeiras.
-        </p>
-      </div>
+      <PageHeader
+        title="Categorias"
+        description="Gerencie as categorias usadas para classificar entradas e saídas financeiras."
+      />
 
       <CategoriesView categories={categories} filterType={filterType} />
     </div>
