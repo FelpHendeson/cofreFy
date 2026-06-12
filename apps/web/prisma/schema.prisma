@@ -58,7 +58,7 @@ enum PaymentMethod {
 model Transaction {
   id            String                @id @default(cuid())
   type          TransactionType
-  description   String
+  description   String                @db.VarChar(120)
   amount        Decimal               @db.Decimal(10, 2)
   date          DateTime
   categoryId    String

@@ -74,6 +74,8 @@ export function TransactionForm({
     reset,
     watch,
     setValue,
+    setError,
+    clearErrors,
     formState: { errors },
   } = useForm<TransactionFormInput>({
     resolver: zodResolver(transactionFormSchema),
@@ -127,8 +129,33 @@ export function TransactionForm({
     }
   }, [compatibleCategories, selectedCategoryId, setValue]);
 
+  function applyServerErrors(
+    fieldErrors?: Record<string, string[]>,
+    message?: string,
+  ) {
+    clearErrors();
+    let hasFieldError = false;
+
+    if (fieldErrors) {
+      for (const [field, messages] of Object.entries(fieldErrors)) {
+        if (messages?.[0]) {
+          setError(field as keyof TransactionFormInput, { message: messages[0] });
+          hasFieldError = true;
+        }
+      }
+    }
+
+    if (message) {
+      setServerMessage(message);
+      return;
+    }
+
+    setServerMessage(hasFieldError ? null : "Não foi possível salvar a movimentação.");
+  }
+
   function onSubmit(values: TransactionFormInput) {
     setServerMessage(null);
+    clearErrors();
 
     startTransition(async () => {
       const result = isEditing
@@ -136,9 +163,7 @@ export function TransactionForm({
         : await createTransactionAction(values);
 
       if (!result.success) {
-        setServerMessage(
-          result.message ?? "Não foi possível salvar a movimentação.",
-        );
+        applyServerErrors(result.fieldErrors, result.message);
         return;
       }
 
@@ -231,6 +256,12 @@ export function TransactionForm({
           >
             Categoria
           </label>
+          {isEditing && transaction && !transaction.category.isActive && (
+            <p className="mb-2 text-sm text-amber-700">
+              A categoria &quot;{transaction.category.name}&quot; está inativa. Selecione
+              uma categoria ativa para salvar.
+            </p>
+          )}
           <select
             id="categoryId"
             {...register("categoryId")}

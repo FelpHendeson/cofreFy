@@ -240,6 +240,8 @@ pnpm db:generate
 
 Depois reinicie com `pnpm dev`.
 
+Os scripts `lint`, `dev`, `build` e `db:*` (exceto `db:up`/`db:down`/`db:wait`) rodam via `node scripts/web.mjs` para evitar falhas de `pnpm` aninhado no Windows.
+
 ## Documentação
 
 Consulte os documentos em `docs/` **antes** de implementar qualquer funcionalidade:
