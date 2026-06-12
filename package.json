@@ -19,6 +19,7 @@
     "db:migrate": "node scripts/web.mjs db:migrate",
     "db:migrate:deploy": "node scripts/web.mjs db:migrate:deploy",
     "db:seed": "node scripts/web.mjs db:seed",
+    "db:seed:scenario": "node scripts/web.mjs db:seed:scenario",
     "db:reset": "node scripts/web.mjs db:reset"
   },
   "engines": {

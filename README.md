@@ -154,10 +154,27 @@ pnpm db:generate
 | `pnpm db:migrate` | Desenvolvimento com histórico — cria/aplica migrations (interativo) |
 | `pnpm db:migrate:deploy` | Setup/CI — aplica migrations pendentes sem prompt |
 | `pnpm db:seed` | Insere categorias padrão (idempotente) |
+| `pnpm db:seed:scenario` | Insere cenário anual de movimentações para testes |
 | `pnpm db:reset` | Reseta banco local, reaplica migrations e executa seed |
 | `pnpm db:generate` | Regenera o Prisma Client após mudanças no schema |
 
 O seed de categorias pode ser executado várias vezes sem duplicar registros.
+
+### Cenário anual (desenvolvimento)
+
+Para popular o banco com um ano inteiro de movimentações fictícias (dashboard, filtros, balancete futuro):
+
+```bash
+pnpm db:seed:scenario
+```
+
+Por padrão usa o **ano anterior** (ex.: em 2026, gera dados de 2025). Para outro ano:
+
+```bash
+SEED_SCENARIO_YEAR=2026 pnpm db:seed:scenario
+```
+
+O cenário é **idempotente por ano**: reexecutar remove e recria apenas as movimentações marcadas com `seed:annual-scenario-<ano>`. Não afeta dados cadastrados manualmente.
 
 O banco shadow (`cofrefy_shadow`) é criado automaticamente pelo `pnpm dev:setup`. Se `pnpm db:migrate` falhar com banco shadow inexistente (`P1003`), execute:
 

@@ -14,6 +14,8 @@ const tasks = {
   "db:migrate": () => runWeb("npx", ["prisma", "migrate", "dev"]),
   "db:migrate:deploy": () => runWeb("npx", ["prisma", "migrate", "deploy"]),
   "db:seed": () => runWeb("node", ["--env-file=.env", "prisma/seed.mjs"]),
+  "db:seed:scenario": () =>
+    runWeb("node", ["--env-file=.env", "prisma/seed-scenario.mjs"]),
   "db:reset": () => runWeb("npx", ["prisma", "migrate", "reset", "--force"]),
 };
 
