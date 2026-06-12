@@ -1,4 +1,5 @@
 import type { Category } from "@prisma/client";
+import { prisma } from "@/lib/prisma";
 
 export type CategoryDeleteCheck = {
   canDelete: boolean;
@@ -32,7 +33,7 @@ export async function canDeleteCategory(
   return { canDelete: true };
 }
 
-async function categoryHasTransactions(_categoryId: string): Promise<boolean> {
-  // TODO: implementar quando o modelo Transaction existir no Prisma.
-  return false;
+async function categoryHasTransactions(categoryId: string): Promise<boolean> {
+  const count = await prisma.transaction.count({ where: { categoryId } });
+  return count > 0;
 }

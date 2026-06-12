@@ -25,6 +25,54 @@ model Category {
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
 
+  transactions Transaction[]
+
   @@unique([name, type])
   @@map("categories")
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+enum ExpenseQualification {
+  ESSENTIAL
+  IMPORTANT
+  SUPERFLUOUS
+  INVESTMENT
+  DEBT
+  EMERGENCY
+}
+
+enum PaymentMethod {
+  PIX
+  CASH
+  DEBIT_CARD
+  CREDIT_CARD
+  BANK_SLIP
+  BANK_TRANSFER
+  OTHER
+}
+
+model Transaction {
+  id            String                @id @default(cuid())
+  type          TransactionType
+  description   String
+  amount        Decimal               @db.Decimal(10, 2)
+  date          DateTime
+  categoryId    String
+  qualification ExpenseQualification?
+  paymentMethod PaymentMethod?
+  notes         String?               @db.VarChar(500)
+  isRecurring   Boolean               @default(false)
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @updatedAt
+
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@index([date])
+  @@index([type])
+  @@index([categoryId])
+  @@map("transactions")
 }

@@ -81,6 +81,7 @@ O `.env` na raiz é usado pelo Docker Compose. O `.env` em `apps/web/` é usado 
 | `MYSQL_USER` | Usuário do banco (`cofrefy_user`) |
 | `MYSQL_PASSWORD` | Senha do usuário |
 | `MYSQL_ROOT_PASSWORD` | Senha root do MySQL |
+| `MYSQL_HOST_PORT` | Porta do MySQL no host (padrão: `3306`) |
 | `DATABASE_URL` | URL de conexão do Prisma |
 | `SHADOW_DATABASE_URL` | URL root para migrations locais (`prisma migrate dev`) |
 | `PORT` | Porta do servidor Next.js (padrão: `3000`) |
@@ -127,6 +128,21 @@ A porta é definida por `PORT` em `apps/web/.env` (padrão: **3000**). Se 3000 e
 
 - App: `http://localhost:<PORT>`
 - Categorias: `http://localhost:<PORT>/categories`
+- Movimentações: `http://localhost:<PORT>/transactions`
+
+## Módulos implementados
+
+| Rota | Descrição |
+|---|---|
+| `/categories` | CRUD de categorias financeiras |
+| `/transactions` | CRUD de movimentações (entradas e saídas) com filtros |
+
+Após alterar o schema Prisma, aplique as migrations:
+
+```bash
+pnpm db:migrate:deploy
+pnpm db:generate
+```
 
 ## Banco de dados e módulos
 
@@ -194,7 +210,35 @@ Esperado: `Conexão com MySQL estabelecida com sucesso.`
 Com `pnpm dev` ou após `pnpm dev:setup`:
 
 - Abra `http://localhost:3000` (ou a porta definida em `PORT`)
-- Acesse `http://localhost:3000/categories` para ver o módulo de categorias
+- Acesse `http://localhost:3000/categories` para categorias
+- Acesse `http://localhost:3000/transactions` para movimentações
+
+## Solução de problemas
+
+### Porta 3306 já em uso
+
+Se houver MySQL local na porta 3306, configure no `.env` da raiz:
+
+```env
+MYSQL_HOST_PORT=3307
+```
+
+E ajuste em `apps/web/.env`:
+
+```env
+DATABASE_URL=mysql://cofrefy_user:cofrefy_password@localhost:3307/cofrefy
+SHADOW_DATABASE_URL=mysql://root:root_password@localhost:3307/cofrefy_shadow
+```
+
+### `pnpm db:generate` falha com EPERM (Windows)
+
+O Prisma não consegue regenerar o client enquanto o servidor Next.js está rodando. Encerre o dev server (`Ctrl+C`) e execute:
+
+```bash
+pnpm db:generate
+```
+
+Depois reinicie com `pnpm dev`.
 
 ## Documentação
 
@@ -204,10 +248,10 @@ Consulte os documentos em `docs/` **antes** de implementar qualquer funcionalida
 - `docs/01-visao-geral-do-produto.md`
 - `docs/02-guia-de-sdd.md`
 - `docs/03-modulo-categorias.md` — módulo implementado
+- `docs/04-modulo-movimentacoes.md` — módulo implementado
 
 Documentos SDD pendentes (criar antes de cada módulo):
 
-- `docs/04-modulo-movimentacoes.md`
 - `docs/05-modulo-dashboard-mensal.md`
 - `docs/06-modulo-balancete.md`
 - `docs/07-plano-de-testes.md`
