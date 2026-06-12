@@ -164,7 +164,7 @@ O seed de categorias pode ser executado várias vezes sem duplicar registros.
 
 ### Cenário anual (desenvolvimento)
 
-Para popular o banco com um ano inteiro de movimentações fictícias (dashboard, filtros, balancete futuro):
+Para popular o banco com um ano inteiro de movimentações fictícias (dashboard, balancete e filtros):
 
 ```bash
 pnpm db:seed:scenario
