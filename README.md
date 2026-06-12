@@ -128,6 +128,7 @@ A porta é definida por `PORT` em `apps/web/.env` (padrão: **3000**). Se 3000 e
 
 - App: `http://localhost:<PORT>`
 - Dashboard: `http://localhost:<PORT>/dashboard`
+- Balancete: `http://localhost:<PORT>/balance`
 - Categorias: `http://localhost:<PORT>/categories`
 - Movimentações: `http://localhost:<PORT>/transactions`
 
@@ -136,6 +137,7 @@ A porta é definida por `PORT` em `apps/web/.env` (padrão: **3000**). Se 3000 e
 | Rota | Descrição |
 |---|---|
 | `/dashboard` | Dashboard mensal com indicadores financeiros |
+| `/balance` | Balancete mensal para conferência de créditos e débitos |
 | `/categories` | CRUD de categorias financeiras |
 | `/transactions` | CRUD de movimentações (entradas e saídas) com filtros |
 
@@ -230,6 +232,7 @@ Com `pnpm dev` ou após `pnpm dev:setup`:
 
 - Abra `http://localhost:3000` (redireciona para `/dashboard`)
 - Acesse `http://localhost:3000/dashboard` para o dashboard mensal
+- Acesse `http://localhost:3000/balance` para o balancete mensal
 - Acesse `http://localhost:3000/categories` para categorias
 - Acesse `http://localhost:3000/transactions` para movimentações
 
@@ -272,10 +275,9 @@ Consulte os documentos em `docs/` **antes** de implementar qualquer funcionalida
 - `docs/03-modulo-categorias.md` — módulo implementado
 - `docs/04-modulo-movimentacoes.md` — módulo implementado
 - `docs/05-modulo-dashboard-mensal.md` — módulo implementado
+- `docs/06-modulo-balancete-mensal.md` — módulo implementado
 
 Documentos SDD pendentes (criar antes de cada módulo):
-
-- `docs/06-modulo-balancete.md`
 - `docs/07-plano-de-testes.md`
 - `docs/08-prompts-para-agente.md`
 
