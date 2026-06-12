@@ -272,13 +272,16 @@ Consulte os documentos em `docs/` **antes** de implementar qualquer funcionalida
 - `docs/03-modulo-categorias.md` — módulo implementado
 - `docs/04-modulo-movimentacoes.md` — módulo implementado
 - `docs/05-modulo-dashboard-mensal.md` — módulo implementado
-- `docs/09-relatorio-de-implementacao.md` — status spec vs código
 
 Documentos SDD pendentes (criar antes de cada módulo):
 
 - `docs/06-modulo-balancete.md`
 - `docs/07-plano-de-testes.md`
 - `docs/08-prompts-para-agente.md`
+
+Relatório (fora da numeração SDD):
+
+- `docs/relatorio-de-implementacao.md` — o que foi pedido e entregue vs specs
 
 ## UI
 
