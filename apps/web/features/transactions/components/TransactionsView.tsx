@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { TransactionListFilters } from "../types/transaction.types";
 import type { SerializedTransactionWithCategory } from "../utils/transaction-serializer";
+import { Button } from "@/components/ui/Button";
 import { TransactionFilters } from "./TransactionFilters";
 import { TransactionFormModal } from "./TransactionFormModal";
 import { TransactionList } from "./TransactionList";
@@ -43,13 +44,13 @@ export function TransactionsView({
           <TransactionFilters filters={filters} categories={categories} />
         </div>
 
-        <button
+        <Button
           type="button"
+          className="shrink-0"
           onClick={() => setModal({ mode: "create" })}
-          className="inline-flex shrink-0 items-center justify-center rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
         >
           Nova movimentação
-        </button>
+        </Button>
       </div>
 
       <TransactionList

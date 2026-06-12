@@ -3,7 +3,11 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Category, TransactionType } from "@prisma/client";
 import { useEffect, useMemo, useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Select } from "@/components/ui/Select";
+import { Textarea } from "@/components/ui/Textarea";
 import {
   createTransactionAction,
   updateTransactionAction,
@@ -72,7 +76,7 @@ export function TransactionForm({
     register,
     handleSubmit,
     reset,
-    watch,
+    control,
     setValue,
     setError,
     clearErrors,
@@ -82,11 +86,11 @@ export function TransactionForm({
     defaultValues: getDefaultValues(),
   });
 
-  const selectedType = watch("type");
-  const selectedCategoryId = watch("categoryId");
+  const selectedType = useWatch({ control, name: "type" });
+  const selectedCategoryId = useWatch({ control, name: "categoryId" });
 
   const compatibleCategories = useMemo(
-    () => getCompatibleCategories(categories, selectedType),
+    () => getCompatibleCategories(categories, selectedType ?? "EXPENSE"),
     [categories, selectedType],
   );
 
@@ -178,172 +182,103 @@ export function TransactionForm({
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
       <div className="grid gap-4 md:grid-cols-2">
-        <div>
-          <label htmlFor="type" className="mb-1 block text-sm font-medium text-slate-700">
-            Tipo
-          </label>
-          <select
-            id="type"
-            {...register("type")}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
-          >
-            {(Object.keys(transactionTypeLabels) as TransactionType[]).map((type) => (
-              <option key={type} value={type}>
-                {transactionTypeLabels[type]}
-              </option>
-            ))}
-          </select>
-          {errors.type && (
-            <p className="mt-1 text-sm text-red-600">{errors.type.message}</p>
-          )}
-        </div>
+        <Select id="type" label="Tipo" error={errors.type?.message} {...register("type")}>
+          {(Object.keys(transactionTypeLabels) as TransactionType[]).map((type) => (
+            <option key={type} value={type}>
+              {transactionTypeLabels[type]}
+            </option>
+          ))}
+        </Select>
 
-        <div>
-          <label htmlFor="date" className="mb-1 block text-sm font-medium text-slate-700">
-            Data
-          </label>
-          <input
-            id="date"
-            type="date"
-            {...register("date")}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
-          />
-          {errors.date && (
-            <p className="mt-1 text-sm text-red-600">{errors.date.message}</p>
-          )}
-        </div>
+        <Input
+          id="date"
+          type="date"
+          label="Data"
+          error={errors.date?.message}
+          {...register("date")}
+        />
 
         <div className="md:col-span-2">
-          <label
-            htmlFor="description"
-            className="mb-1 block text-sm font-medium text-slate-700"
-          >
-            Descrição
-          </label>
-          <input
+          <Input
             id="description"
-            type="text"
-            {...register("description")}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+            label="Descrição"
             placeholder="Ex.: Supermercado"
+            error={errors.description?.message}
+            {...register("description")}
           />
-          {errors.description && (
-            <p className="mt-1 text-sm text-red-600">{errors.description.message}</p>
-          )}
         </div>
 
-        <div>
-          <label htmlFor="amount" className="mb-1 block text-sm font-medium text-slate-700">
-            Valor
-          </label>
-          <input
-            id="amount"
-            type="text"
-            inputMode="decimal"
-            {...register("amount")}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
-            placeholder="0,00"
-          />
-          {errors.amount && (
-            <p className="mt-1 text-sm text-red-600">{errors.amount.message}</p>
-          )}
-        </div>
+        <Input
+          id="amount"
+          type="text"
+          inputMode="decimal"
+          label="Valor"
+          placeholder="0,00"
+          error={errors.amount?.message}
+          {...register("amount")}
+        />
 
-        <div>
-          <label
-            htmlFor="categoryId"
-            className="mb-1 block text-sm font-medium text-slate-700"
-          >
-            Categoria
-          </label>
-          {isEditing && transaction && !transaction.category.isActive && (
-            <p className="mb-2 text-sm text-amber-700">
-              A categoria &quot;{transaction.category.name}&quot; está inativa. Selecione
-              uma categoria ativa para salvar.
-            </p>
-          )}
-          <select
-            id="categoryId"
-            {...register("categoryId")}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
-          >
-            <option value="">Selecione uma categoria</option>
-            {compatibleCategories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-          {errors.categoryId && (
-            <p className="mt-1 text-sm text-red-600">{errors.categoryId.message}</p>
-          )}
-        </div>
+        <Select
+          id="categoryId"
+          label="Categoria"
+          hint={
+            isEditing && transaction && !transaction.category.isActive
+              ? `A categoria "${transaction.category.name}" está inativa. Selecione uma categoria ativa para salvar.`
+              : undefined
+          }
+          error={errors.categoryId?.message}
+          {...register("categoryId")}
+        >
+          <option value="">Selecione uma categoria</option>
+          {compatibleCategories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name}
+            </option>
+          ))}
+        </Select>
 
         {selectedType === "EXPENSE" && (
-          <div>
-            <label
-              htmlFor="qualification"
-              className="mb-1 block text-sm font-medium text-slate-700"
-            >
-              Qualificação (opcional)
-            </label>
-            <select
-              id="qualification"
-              {...register("qualification")}
-              className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
-            >
-              <option value="">Sem qualificação</option>
-              {Object.entries(expenseQualificationLabels).map(([value, label]) => (
-                <option key={value} value={value}>
-                  {label}
-                </option>
-              ))}
-            </select>
-            {errors.qualification && (
-              <p className="mt-1 text-sm text-red-600">{errors.qualification.message}</p>
-            )}
-          </div>
-        )}
-
-        <div>
-          <label
-            htmlFor="paymentMethod"
-            className="mb-1 block text-sm font-medium text-slate-700"
+          <Select
+            id="qualification"
+            label="Qualificação (opcional)"
+            error={errors.qualification?.message}
+            {...register("qualification")}
           >
-            Forma de pagamento (opcional)
-          </label>
-          <select
-            id="paymentMethod"
-            {...register("paymentMethod")}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
-          >
-            <option value="">Não informada</option>
-            {paymentMethodOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
+            <option value="">Sem qualificação</option>
+            {Object.entries(expenseQualificationLabels).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
               </option>
             ))}
-          </select>
-        </div>
+          </Select>
+        )}
+
+        <Select
+          id="paymentMethod"
+          label="Forma de pagamento (opcional)"
+          {...register("paymentMethod")}
+        >
+          <option value="">Não informada</option>
+          {paymentMethodOptions.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </Select>
 
         <div className="md:col-span-2">
-          <label htmlFor="notes" className="mb-1 block text-sm font-medium text-slate-700">
-            Observações (opcional)
-          </label>
-          <textarea
+          <Textarea
             id="notes"
             rows={3}
-            {...register("notes")}
-            className="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
+            label="Observações (opcional)"
             placeholder="Informações adicionais sobre a movimentação"
+            error={errors.notes?.message}
+            {...register("notes")}
           />
-          {errors.notes && (
-            <p className="mt-1 text-sm text-red-600">{errors.notes.message}</p>
-          )}
         </div>
 
         <div className="md:col-span-2">
-          <label className="inline-flex items-center gap-2 text-sm text-slate-700">
+          <label className="inline-flex items-center gap-2.5 text-sm text-slate-700">
             <input
               type="checkbox"
               {...register("isRecurring")}
@@ -357,26 +292,18 @@ export function TransactionForm({
       {serverMessage && <p className="text-sm text-red-600">{serverMessage}</p>}
 
       <div className="flex flex-wrap gap-3">
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-emerald-700 disabled:cursor-not-allowed disabled:opacity-60"
-        >
+        <Button type="submit" disabled={isPending}>
           {isPending
             ? "Salvando..."
             : isEditing
               ? "Salvar alterações"
               : "Criar movimentação"}
-        </button>
+        </Button>
 
         {onCancel && (
-          <button
-            type="button"
-            onClick={onCancel}
-            className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
-          >
+          <Button type="button" variant="secondary" onClick={onCancel}>
             Cancelar
-          </button>
+          </Button>
         )}
       </div>
     </form>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { FilterSelect } from "@/components/ui/FilterSelect";
 import { monthLabels } from "@/features/transactions/utils/transaction-labels";
 import type { MonthPeriod } from "../types/dashboard.types";
 
@@ -22,41 +23,27 @@ export function DashboardMonthFilter({ period }: DashboardMonthFilterProps) {
 
   return (
     <div className="grid gap-4 sm:grid-cols-2 lg:max-w-md">
-      <div>
-        <label htmlFor="dashboard-month-filter" className="mb-1 block text-sm font-medium text-slate-700">
-          Mês
-        </label>
-        <select
-          id="dashboard-month-filter"
-          value={period.month}
-          onChange={(event) => updateParam("month", event.target.value)}
-          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
-        >
-          {monthLabels.map((label, index) => (
-            <option key={label} value={index + 1}>
-              {label}
-            </option>
-          ))}
-        </select>
-      </div>
+      <FilterSelect
+        id="dashboard-month-filter"
+        label="Mês"
+        value={period.month}
+        onChange={(value) => updateParam("month", value)}
+        options={monthLabels.map((label, index) => ({
+          value: index + 1,
+          label,
+        }))}
+      />
 
-      <div>
-        <label htmlFor="dashboard-year-filter" className="mb-1 block text-sm font-medium text-slate-700">
-          Ano
-        </label>
-        <select
-          id="dashboard-year-filter"
-          value={period.year}
-          onChange={(event) => updateParam("year", event.target.value)}
-          className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
-        >
-          {yearOptions.map((year) => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
-      </div>
+      <FilterSelect
+        id="dashboard-year-filter"
+        label="Ano"
+        value={period.year}
+        onChange={(value) => updateParam("year", value)}
+        options={yearOptions.map((year) => ({
+          value: year,
+          label: String(year),
+        }))}
+      />
     </div>
   );
 }

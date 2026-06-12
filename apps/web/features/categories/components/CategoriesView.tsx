@@ -4,6 +4,7 @@ import type { Category } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import type { CategoryFilterType } from "../types/category.types";
+import { Button } from "@/components/ui/Button";
 import { CategoryFilters } from "./CategoryFilters";
 import { CategoryFormModal } from "./CategoryFormModal";
 import { CategoryList } from "./CategoryList";
@@ -35,13 +36,9 @@ export function CategoriesView({ categories, filterType }: CategoriesViewProps) 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <CategoryFilters currentType={filterType} />
 
-        <button
-          type="button"
-          onClick={() => setModal({ mode: "create" })}
-          className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"
-        >
+        <Button type="button" onClick={() => setModal({ mode: "create" })}>
           Criar categoria
-        </button>
+        </Button>
       </div>
 
       <CategoryList

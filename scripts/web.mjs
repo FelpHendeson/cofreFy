@@ -1,22 +1,26 @@
-import { runWeb } from "./lib/run-web.mjs";
+import {
+  runEslint,
+  runNextBuild,
+  runNodeEnvScript,
+  runPrisma,
+} from "./lib/run-web.mjs";
 
 const task = process.argv[2];
 
 const tasks = {
-  lint: () => runWeb("npx", ["eslint"]),
-  dev: () => runWeb("node", ["--env-file=.env", "scripts/dev.mjs"]),
-  build: () => runWeb("npx", ["next", "build"]),
-  start: () => runWeb("node", ["--env-file=.env", "scripts/start.mjs"]),
-  "db:generate": () => runWeb("npx", ["prisma", "generate"]),
-  "db:push": () => runWeb("npx", ["prisma", "db", "push"]),
-  "db:studio": () => runWeb("npx", ["prisma", "studio"]),
-  "db:validate": () => runWeb("node", ["--env-file=.env", "scripts/validate-db.mjs"]),
-  "db:migrate": () => runWeb("npx", ["prisma", "migrate", "dev"]),
-  "db:migrate:deploy": () => runWeb("npx", ["prisma", "migrate", "deploy"]),
-  "db:seed": () => runWeb("node", ["--env-file=.env", "prisma/seed.mjs"]),
-  "db:seed:scenario": () =>
-    runWeb("node", ["--env-file=.env", "prisma/seed-scenario.mjs"]),
-  "db:reset": () => runWeb("npx", ["prisma", "migrate", "reset", "--force"]),
+  lint: () => runEslint(),
+  dev: () => runNodeEnvScript("scripts/dev.mjs"),
+  build: () => runNextBuild(),
+  start: () => runNodeEnvScript("scripts/start.mjs"),
+  "db:generate": () => runPrisma(["generate"]),
+  "db:push": () => runPrisma(["db", "push"]),
+  "db:studio": () => runPrisma(["studio"]),
+  "db:validate": () => runNodeEnvScript("scripts/validate-db.mjs"),
+  "db:migrate": () => runPrisma(["migrate", "dev"]),
+  "db:migrate:deploy": () => runPrisma(["migrate", "deploy"]),
+  "db:seed": () => runNodeEnvScript("prisma/seed.mjs"),
+  "db:seed:scenario": () => runNodeEnvScript("prisma/seed-scenario.mjs"),
+  "db:reset": () => runPrisma(["migrate", "reset", "--force"]),
 };
 
 if (!task || !tasks[task]) {

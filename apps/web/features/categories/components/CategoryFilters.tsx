@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter, useSearchParams } from "next/navigation";
+import { FilterSelect } from "@/components/ui/FilterSelect";
 import type { CategoryFilterType } from "../types/category.types";
 import { categoryFilterOptions } from "../utils/category-labels";
 
@@ -26,24 +27,13 @@ export function CategoryFilters({ currentType = "ALL" }: CategoryFiltersProps) {
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      <label htmlFor="category-type-filter" className="text-sm font-medium text-slate-700">
-        Filtrar por tipo
-      </label>
-      <select
-        id="category-type-filter"
-        value={currentType}
-        onChange={(event) =>
-          handleFilterChange(event.target.value as CategoryFilterType)
-        }
-        className="w-full max-w-xs rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-100"
-      >
-        {categoryFilterOptions.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.label}
-          </option>
-        ))}
-      </select>
-    </div>
+    <FilterSelect
+      id="category-type-filter"
+      label="Filtrar por tipo"
+      value={currentType}
+      onChange={(value) => handleFilterChange(value as CategoryFilterType)}
+      options={categoryFilterOptions}
+      className="max-w-xs"
+    />
   );
 }

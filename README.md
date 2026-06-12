@@ -279,6 +279,10 @@ Documentos SDD pendentes (criar antes de cada módulo):
 - `docs/07-plano-de-testes.md`
 - `docs/08-prompts-para-agente.md`
 
+## UI
+
+A aplicação usa **Tailwind CSS 4** (já definido na stack). Componentes de formulário compartilhados ficam em `apps/web/components/ui/` (`Select`, `Input`, `Button`, etc.).
+
 ## Stack
 
 - TypeScript
