@@ -272,6 +272,7 @@ Consulte os documentos em `docs/` **antes** de implementar qualquer funcionalida
 - `docs/03-modulo-categorias.md` — módulo implementado
 - `docs/04-modulo-movimentacoes.md` — módulo implementado
 - `docs/05-modulo-dashboard-mensal.md` — módulo implementado
+- `docs/09-relatorio-de-implementacao.md` — status spec vs código
 
 Documentos SDD pendentes (criar antes de cada módulo):
 
