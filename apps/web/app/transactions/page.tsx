@@ -5,6 +5,7 @@ import {
   transactionTypeSchema,
 } from "@/features/transactions/schemas/transaction.schema";
 import { transactionService } from "@/features/transactions/services/transaction.service";
+import { serializeTransactions } from "@/features/transactions/utils/transaction-serializer";
 import type {
   TransactionFilterType,
   TransactionListFilters,
@@ -107,7 +108,7 @@ export default async function TransactionsPage({ searchParams }: TransactionsPag
       </div>
 
       <TransactionsView
-        transactions={transactions}
+        transactions={serializeTransactions(transactions)}
         categories={categories}
         filters={filters}
       />

@@ -3,11 +3,11 @@
 import type { Category } from "@prisma/client";
 import { TransactionDialog } from "./TransactionDialog";
 import { TransactionForm } from "./TransactionForm";
-import type { TransactionWithCategory } from "../types/transaction.types";
+import type { SerializedTransactionWithCategory } from "../utils/transaction-serializer";
 
 type TransactionFormModalProps = {
   open: boolean;
-  transaction?: TransactionWithCategory;
+  transaction?: SerializedTransactionWithCategory;
   categories: Category[];
   onClose: () => void;
   onSuccess: () => void;

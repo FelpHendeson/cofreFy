@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { deleteTransactionAction } from "../actions/transaction.actions";
-import type { TransactionWithCategory } from "../types/transaction.types";
+import type { SerializedTransactionWithCategory } from "../utils/transaction-serializer";
 import { formatDate } from "../utils/transaction-formatters";
 import { paymentMethodLabels } from "../utils/transaction-labels";
 import { TransactionAmount } from "./TransactionAmount";
@@ -12,8 +12,8 @@ import { TransactionQualificationBadge } from "./TransactionQualificationBadge";
 import { TransactionTypeBadge } from "./TransactionTypeBadge";
 
 type TransactionListProps = {
-  transactions: TransactionWithCategory[];
-  onEdit: (transaction: TransactionWithCategory) => void;
+  transactions: SerializedTransactionWithCategory[];
+  onEdit: (transaction: SerializedTransactionWithCategory) => void;
 };
 
 type ActionFeedback = {
@@ -23,7 +23,7 @@ type ActionFeedback = {
 
 type DeleteState =
   | { mode: "closed" }
-  | { mode: "confirm"; transaction: TransactionWithCategory };
+  | { mode: "confirm"; transaction: SerializedTransactionWithCategory };
 
 export function TransactionList({ transactions, onEdit }: TransactionListProps) {
   const router = useRouter();

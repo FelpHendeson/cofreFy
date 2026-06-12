@@ -1,5 +1,9 @@
 import type { Decimal } from "@prisma/client/runtime/library";
 
+function toDateValue(date: Date | string): Date {
+  return typeof date === "string" ? new Date(date) : date;
+}
+
 export function formatAmount(amount: Decimal | number | string): string {
   const numeric =
     typeof amount === "object" && amount !== null && "toNumber" in amount
@@ -12,18 +16,19 @@ export function formatAmount(amount: Decimal | number | string): string {
   }).format(numeric);
 }
 
-export function formatDate(date: Date): string {
+export function formatDate(date: Date | string): string {
   return new Intl.DateTimeFormat("pt-BR", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
-  }).format(date);
+  }).format(toDateValue(date));
 }
 
-export function formatDateForInput(date: Date): string {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
+export function formatDateForInput(date: Date | string): string {
+  const value = toDateValue(date);
+  const year = value.getFullYear();
+  const month = String(value.getMonth() + 1).padStart(2, "0");
+  const day = String(value.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
 }
 

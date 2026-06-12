@@ -3,16 +3,14 @@
 import type { Category } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import type {
-  TransactionListFilters,
-  TransactionWithCategory,
-} from "../types/transaction.types";
+import type { TransactionListFilters } from "../types/transaction.types";
+import type { SerializedTransactionWithCategory } from "../utils/transaction-serializer";
 import { TransactionFilters } from "./TransactionFilters";
 import { TransactionFormModal } from "./TransactionFormModal";
 import { TransactionList } from "./TransactionList";
 
 type TransactionsViewProps = {
-  transactions: TransactionWithCategory[];
+  transactions: SerializedTransactionWithCategory[];
   categories: Category[];
   filters: TransactionListFilters;
 };
@@ -20,7 +18,7 @@ type TransactionsViewProps = {
 type ModalState =
   | { mode: "closed" }
   | { mode: "create" }
-  | { mode: "edit"; transaction: TransactionWithCategory };
+  | { mode: "edit"; transaction: SerializedTransactionWithCategory };
 
 export function TransactionsView({
   transactions,

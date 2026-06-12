@@ -1,12 +1,12 @@
 "use client";
 
-import type { TransactionWithCategory } from "../types/transaction.types";
+import type { SerializedTransactionWithCategory } from "../utils/transaction-serializer";
 import { formatAmount, formatDate } from "../utils/transaction-formatters";
 import { TransactionDialog } from "./TransactionDialog";
 
 type TransactionDeleteDialogProps = {
   open: boolean;
-  transaction?: TransactionWithCategory;
+  transaction?: SerializedTransactionWithCategory;
   isPending: boolean;
   onClose: () => void;
   onConfirm: () => void;

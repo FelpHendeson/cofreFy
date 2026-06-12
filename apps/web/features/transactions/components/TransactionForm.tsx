@@ -12,7 +12,7 @@ import {
   transactionFormSchema,
   type TransactionFormInput,
 } from "../schemas/transaction.schema";
-import type { TransactionWithCategory } from "../types/transaction.types";
+import type { SerializedTransactionWithCategory } from "../utils/transaction-serializer";
 import {
   expenseQualificationLabels,
   paymentMethodOptions,
@@ -24,7 +24,7 @@ import {
 } from "../utils/transaction-formatters";
 
 type TransactionFormProps = {
-  transaction?: TransactionWithCategory;
+  transaction?: SerializedTransactionWithCategory;
   categories: Category[];
   onCancel?: () => void;
   onSuccess?: () => void;
