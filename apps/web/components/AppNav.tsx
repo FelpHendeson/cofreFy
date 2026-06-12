@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navItems = [
-  { href: "/", label: "Início" },
+  { href: "/dashboard", label: "Dashboard" },
   { href: "/categories", label: "Categorias" },
   { href: "/transactions", label: "Movimentações" },
 ];
@@ -15,17 +15,14 @@ export function AppNav() {
   return (
     <header className="border-b border-slate-200 bg-white">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-4">
-        <Link href="/" className="text-sm font-semibold text-slate-900">
+        <Link href="/dashboard" className="text-sm font-semibold text-slate-900">
           CofreFy
         </Link>
 
         <nav aria-label="Navegação principal">
           <ul className="flex flex-wrap items-center gap-1">
             {navItems.map((item) => {
-              const isActive =
-                item.href === "/"
-                  ? pathname === "/"
-                  : pathname.startsWith(item.href);
+              const isActive = pathname.startsWith(item.href);
 
               return (
                 <li key={item.href}>
